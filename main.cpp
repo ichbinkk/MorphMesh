@@ -33,7 +33,8 @@ typedef
   std::vector<Eigen::Quaterniond,Eigen::aligned_allocator<Eigen::Quaterniond> >
   RotationList;
 
-const Eigen::RowVector3d sea_green(70./255.,252./255.,167./255.);
+//const Eigen::RowVector3d sea_green(70./255.,252./255.,167./255.);
+const Eigen::RowVector3d sea_green(255./255.,0/255.,0/255.);
 int selected = 0;
 Eigen::MatrixXd V,W,U,C,M;
 Eigen::MatrixXi T,F,BE;
@@ -155,7 +156,7 @@ int main(int argc, char *argv[])
   // Plot the mesh with pseudocolors
   igl::opengl::glfw::Viewer viewer;
   viewer.data().set_mesh(U, F);
-  viewer.data().set_data(W.col(selected));
+  //viewer.data().set_data(W.col(selected));
   viewer.data().set_edges(C,BE,sea_green);
   viewer.data().show_lines = false;
   viewer.data().show_overlay_depth = false;
@@ -164,6 +165,10 @@ int main(int argc, char *argv[])
   viewer.callback_key_down = &key_down;
   viewer.core().is_animating = false;
   viewer.core().animation_max_fps = 30.;
+  //set background color
+  viewer.core().background_color.setOnes();
+  //set face color
+  viewer.data().set_colors(RowVector3d(0,1,0));
   cout<<
     "Press '.' to show next weight function."<<endl<<
     "Press ',' to show previous weight function."<<endl<<
