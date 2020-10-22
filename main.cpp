@@ -34,7 +34,7 @@ typedef
   RotationList;
 
 //const Eigen::RowVector3d sea_green(70./255.,252./255.,167./255.);
-const Eigen::RowVector3d sea_green(255./255.,0/255.,0/255.);
+const Eigen::RowVector3d sea_green(0,1,0);
 int selected = 0;
 Eigen::MatrixXd V,W,U,C,M;
 Eigen::MatrixXi T,F,BE;
@@ -78,7 +78,7 @@ bool pre_draw(igl::opengl::glfw::Viewer & viewer)
     igl::deform_skeleton(C,BE,T,CT,BET);
 
     viewer.data().set_vertices(U);
-    viewer.data().set_edges(CT,BET,sea_green);
+    //viewer.data().set_edges(CT,BET,sea_green);
     viewer.data().compute_normals();
     anim_t += anim_t_dir;
     anim_t_dir *= (anim_t>=1.0 || anim_t<=0.0?-1.0:1.0);
@@ -156,8 +156,8 @@ int main(int argc, char *argv[])
   // Plot the mesh with pseudocolors
   igl::opengl::glfw::Viewer viewer;
   viewer.data().set_mesh(U, F);
-  //viewer.data().set_data(W.col(selected));
-  viewer.data().set_edges(C,BE,sea_green);
+  viewer.data().set_data(W.col(selected));
+  //viewer.data().set_edges(C,BE,sea_green);
   viewer.data().show_lines = false;
   viewer.data().show_overlay_depth = false;
   viewer.data().line_width = 1;
