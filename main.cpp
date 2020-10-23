@@ -156,7 +156,9 @@ int main(int argc, char *argv[])
   // Plot the mesh with pseudocolors
   igl::opengl::glfw::Viewer viewer;
   viewer.data().set_mesh(U, F);
-  viewer.data().set_data(W.col(selected));
+  viewer.data().add_points(U.bottomRows(10), RowVector3d(1, 0, 0));
+  viewer.data().point_size = 6;
+  //viewer.data().set_data(W.col(selected));
   //viewer.data().set_edges(C,BE,sea_green);
   viewer.data().show_lines = false;
   viewer.data().show_overlay_depth = false;
