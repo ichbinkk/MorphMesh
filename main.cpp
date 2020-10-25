@@ -78,6 +78,18 @@ bool pre_draw(igl::opengl::glfw::Viewer & viewer)
     igl::deform_skeleton(C,BE,T,CT,BET);
 
     viewer.data().set_vertices(U);
+	
+	//Change existing points color
+	//viewer.data().set_points(U.row(468), RowVector3d(1, 0, 0));
+	//viewer.data().point_size = 4;
+	MatrixXd fp(5, 3);
+	fp.row(0) = U.row(2076);
+	fp.row(1) = U.row(2382);
+	fp.row(2) = U.row(2743);
+	fp.row(3) = U.row(3111);
+	fp.row(4) = U.row(3431);
+	viewer.data().set_points(fp, RowVector3d(1, 0, 0));
+
     //viewer.data().set_edges(CT,BET,sea_green);
     viewer.data().compute_normals();
     anim_t += anim_t_dir;
@@ -153,15 +165,22 @@ int main(int argc, char *argv[])
   // precompute linear blend skinning matrix
   igl::lbs_matrix(V,W,M);
 
+  MatrixXd fp(5, 3);
+  fp.row(0) = U.row(2076);
+  fp.row(1) = U.row(2382);
+  fp.row(2) = U.row(2743);
+  fp.row(3) = U.row(3111);
+  fp.row(4) = U.row(3431);
+
   // Plot the mesh with pseudocolors
   igl::opengl::glfw::Viewer viewer;
   viewer.data().set_mesh(U, F);
-  viewer.data().add_points(U.bottomRows(10), RowVector3d(1, 0, 0));
-  viewer.data().point_size = 6;
+  viewer.data().set_points(fp, RowVector3d(1, 0, 0));
+  viewer.data().point_size = 5;
   //viewer.data().set_data(W.col(selected));
   //viewer.data().set_edges(C,BE,sea_green);
   viewer.data().show_lines = false;
-  viewer.data().show_overlay_depth = false;
+  viewer.data().show_overlay_depth = true;
   viewer.data().line_width = 1;
   viewer.callback_pre_draw = &pre_draw;
   viewer.callback_key_down = &key_down;
