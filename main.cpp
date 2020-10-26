@@ -20,6 +20,8 @@
 #include <igl/opengl/glfw/Viewer.h>
 #include <igl/bbw.h>
 //#include <igl/embree/bone_heat.h>
+#include <igl/vertex_triangle_adjacency.h>
+
 
 #include <Eigen/Geometry>
 #include <Eigen/StdVector>
@@ -165,18 +167,63 @@ int main(int argc, char *argv[])
   // precompute linear blend skinning matrix
   igl::lbs_matrix(V,W,M);
 
+  //get points data
   MatrixXd fp(5, 3);
   fp.row(0) = U.row(478);
   fp.row(1) = U.row(2388);
   fp.row(2) = U.row(2750);
   fp.row(3) = U.row(3124);
   fp.row(4) = U.row(3430);
+  //MatrixXd sp(3, 3);
+  //sp.row(0) = U.row(2388);
+  //sp.row(1) = U.row(2386);
+  //sp.row(2) = U.row(592);
+  MatrixXi sf(1, 3);
+  sf << 2388, 2386, 592;
+  
+  //find neigbor face
+  int a[5] = { 478,2388,2750,3124,3430};
+  vector<int> bb(a, a + 5);
+  vector<vector<int> > A;
+  vector<vector<int> > Ai;
+  igl::adjacency_list(F, A);
+  igl::vertex_triangle_adjacency(U,F,A,Ai);
+  for (int v = 0; v < bb.size(); ++v) {
+	  vector<int> v_list(A[bb[v]]);
+	  //输出全部元素
+	  for (int i = 0; i < v_list.size(); i++) {
+		  cout << v_list.at(i) << " ";		//如果访问越界，会抛出异常，比下标运算更安全，流畅
+	  }
+	  cout << endl;
+  }
 
   // Plot the mesh with pseudocolors
   igl::opengl::glfw::Viewer viewer;
   viewer.data().set_mesh(U, F);
+  //viewer.data().set_colors(RowVector3d(0, 1, 0));
+  //set points and edges color
   viewer.data().set_points(fp, RowVector3d(1, 0, 0));
   viewer.data().point_size = 5;
+  //viewer.data().set_edges(sp, se, RowVector3d(1, 0, 0));
+  //viewer.append_mesh();
+  //viewer.data().set_mesh(U, sf);
+  //viewer.data().set_colors(RowVector3d(1, 0, 0));
+  
+  //设置面颜色
+  MatrixXd sC(F.rows(), 3);
+  sC << RowVector3d(0, 1, 0).replicate(F.rows(), 1);
+  sC.block<8, 3>(6984, 0) << RowVector3d(1, 0, 0).replicate(8, 1);
+  //设置点颜色
+ // MatrixXd sC(U.rows(), 3);
+ // for (int v = 0; v < bb.size(); ++v) {
+	//vector<int> v_list(A[bb[v]]);
+	//for (int i = 0; i < v_list.size(); i++) {
+	//	sC.row(v_list[i]) << RowVector3d(1, 0, 0);
+	//}
+  //}
+  viewer.data().set_colors(sC);
+
+
   //viewer.data().set_data(W.col(selected));
   //viewer.data().set_edges(C,BE,sea_green);
   viewer.data().show_lines = false;
@@ -189,7 +236,7 @@ int main(int argc, char *argv[])
   //set background color
   viewer.core().background_color.setOnes();
   //set face color
-  viewer.data().set_colors(RowVector3d(0,1,0));
+  //viewer.data().set_colors(RowVector3d(0,1,0));
   cout<<
     "Press '.' to show next weight function."<<endl<<
     "Press ',' to show previous weight function."<<endl<<
