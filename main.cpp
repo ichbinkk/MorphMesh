@@ -83,11 +83,11 @@ bool pre_draw(igl::opengl::glfw::Viewer & viewer)
 	//viewer.data().set_points(U.row(468), RowVector3d(1, 0, 0));
 	//viewer.data().point_size = 4;
 	MatrixXd fp(5, 3);
-	fp.row(0) = U.row(2076);
-	fp.row(1) = U.row(2382);
-	fp.row(2) = U.row(2743);
-	fp.row(3) = U.row(3111);
-	fp.row(4) = U.row(3431);
+	fp.row(0) = U.row(478);
+	fp.row(1) = U.row(2388);
+	fp.row(2) = U.row(2750);
+	fp.row(3) = U.row(3124);
+	fp.row(4) = U.row(3430);
 	viewer.data().set_points(fp, RowVector3d(1, 0, 0));
 
     //viewer.data().set_edges(CT,BET,sea_green);
@@ -166,11 +166,11 @@ int main(int argc, char *argv[])
   igl::lbs_matrix(V,W,M);
 
   MatrixXd fp(5, 3);
-  fp.row(0) = U.row(2076);
-  fp.row(1) = U.row(2382);
-  fp.row(2) = U.row(2743);
-  fp.row(3) = U.row(3111);
-  fp.row(4) = U.row(3431);
+  fp.row(0) = U.row(478);
+  fp.row(1) = U.row(2388);
+  fp.row(2) = U.row(2750);
+  fp.row(3) = U.row(3124);
+  fp.row(4) = U.row(3430);
 
   // Plot the mesh with pseudocolors
   igl::opengl::glfw::Viewer viewer;
